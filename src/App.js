@@ -1,85 +1,55 @@
 import React, {useState} from 'react';
 import './App.css';
-import Person from './Person/Person';
+import Validation from './Validation/Validation';
+import Char from './Char/Char';
 
 const app = (props) => {
-    const [personsState, setPersonsState] = useState({
-        persons: [
-            {name: 'Ilya', age: 23},
-            {name: 'Vasyl', age: 25},
-            {name: 'Peta', age: 30}
-        ],
-        showPersons: false
+    const [state, setState] = useState({
+        inputLength: 0,
+        inputValue: ''
     });
 
-    const [otherState, setOtherState] = useState('someValue');
-
-    const style = {
-        backgroundColor: 'white',
-        font: 'inherit',
-        border: '1px solid blue',
-        padding: '8px',
-        cursor: 'pointer'
-    }
-
-    const nameChangedHandler = (event) => {
-        setPersonsState({
-            persons: [
-                {name: 'Ilya', age: 18},
-                {name: event.target.value, age: 25},
-                {name: 'Peta', age: 30}
-            ],
-            showPersons: true
+    const inputChangeHandler = (event) => {
+        setState({
+            inputLength: event.target.value.length,
+            inputValue: event.target.value
         });
     }
 
-    const deletePersonHandler = (personIndex) => {
-        const persons = [...personsState.persons];
-        persons.splice(personIndex, 1);
-        setPersonsState({
-            persons: persons,
-            showPersons: true
+    const deleteCharHandler = (charIndex) => {
+        const length = state.inputLength;
+
+        const chars = state.inputValue.split('');
+        chars.splice(charIndex, 1);
+
+        const newText = chars.join('');
+
+        setState({
+            inputValue: newText,
+            inputLength: length
         });
     }
-
-    const showPersonsHandler = () => {
-        const showPersons = personsState.showPersons;
-        setPersonsState({
-            persons: [...personsState.persons],
-            showPersons: !showPersons
-        });
-    }
-
-    let persons = null;
-
-    if (personsState.showPersons) {
-        persons = (
-            <div>
-                {personsState.persons.map((person, index) => {
-                    return (
-                        <Person
-                            name={person.name}
-                            age={person.age}
-                            key={index}
-                            changed={nameChangedHandler}
-                            click={() => deletePersonHandler(index)}>
-                            My hobby: Nothing
-                        </Person>
-                    );
-                })}
-            </div>
+    
+    const charList = state.inputValue.split('').map((char, index) => {
+        return (
+            <Char
+                char={char}
+                key={index}
+                click={() => deleteCharHandler(index)}
+            />
         );
-    }
+    });
+
     return (
         <div className="App">
-            <h1>This is React Application.</h1>
+            <h3>Validation & Char separation task</h3>
+            <label>Input a text:
+                <input type="text" onChange={inputChangeHandler} value={state.inputValue} placeholder="text"/>
+            </label>
 
-            <button
-                style={style}
-                onClick={showPersonsHandler}>
-                Show persons
-            </button>
-            {persons}
+            <Validation length={state.inputLength}/>
+
+            {charList}
         </div>
     );
 }
