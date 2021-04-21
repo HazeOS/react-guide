@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import './App.css';
 import Person from './Person/Person';
+import Radium, {StyleRoot} from 'radium';
 
 const app = (props) => {
     const [personsState, setPersonsState] = useState({
@@ -15,11 +16,17 @@ const app = (props) => {
     const [otherState, setOtherState] = useState('someValue');
 
     const style = {
-        backgroundColor: 'white',
+        backgroundColor: 'green',
+        color: 'white',
         font: 'inherit',
+        fontWeight: '600',
         border: '1px solid blue',
         padding: '8px',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        ':hover': {
+            backgroundColor: 'lightgreen',
+            color: 'black'
+        }
     }
 
     const nameChangedHandler = (event) => {
@@ -69,19 +76,31 @@ const app = (props) => {
                 })}
             </div>
         );
-    }
-    return (
-        <div className="App">
-            <h1>This is React Application.</h1>
 
-            <button
-                style={style}
-                onClick={showPersonsHandler}>
-                Show persons
-            </button>
-            {persons}
-        </div>
+        style.backgroundColor = 'red';
+        style[':hover'] = {
+            backgroundColor: 'salmon',
+            color: 'black'
+        }
+    }
+
+    let classes = ['red', 'bold'].join(' ');
+
+    return (
+        <StyleRoot>
+            <div className="App">
+                <h1>This is React Application.</h1>
+                <p className={personsState.showPersons ? classes : ''}>And It's working</p>
+
+                <button
+                    style={style}
+                    onClick={showPersonsHandler}>
+                    Show persons
+                </button>
+                {persons}
+            </div>
+        </StyleRoot>
     );
 }
 
-export default app;
+export default Radium(app);
