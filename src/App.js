@@ -5,27 +5,39 @@ import Person from './Person/Person';
 const app = (props) => {
     const [personsState, setPersonsState] = useState({
         persons: [
-            {name: 'Ilya', age: 23},
-            {name: 'Vasyl', age: 25},
-            {name: 'Peta', age: 30}
+            {id: 0, name: 'Ilya', age: 23},
+            {id: 1, name: 'Vasyl', age: 25},
+            {id: 2, name: 'Peta', age: 30}
         ],
         showPersons: false
     });
 
     const [otherState, setOtherState] = useState('someValue');
 
-    const nameChangedHandler = (event) => {
+    const nameChangedHandler = (event, id) => {
+        const personIndex = personsState.persons.findIndex((person) => {
+            return person.id === id;
+        });
+
+        const person = {
+            ...personsState.persons[personIndex]
+        }
+
+        person.name = event.target.value;
+
+        const persons = [...personsState.persons];
+        persons[personIndex] = person;
+
         setPersonsState({
-            persons: [
-                {name: 'Ilya', age: 18},
-                {name: event.target.value, age: 25},
-                {name: 'Peta', age: 30}
-            ],
+            persons: persons,
             showPersons: true
         });
     }
 
-    const deletePersonHandler = (personIndex) => {
+    const deletePersonHandler = (personId) => {
+        const personIndex = personsState.persons.findIndex((person) => {
+            return person.id === personId;
+        });
         const persons = [...personsState.persons];
         persons.splice(personIndex, 1);
         setPersonsState({
@@ -48,14 +60,14 @@ const app = (props) => {
     if (personsState.showPersons) {
         persons = (
             <div>
-                {personsState.persons.map((person, index) => {
+                {personsState.persons.map((person) => {
                     return (
                         <Person
                             name={person.name}
                             age={person.age}
-                            key={index}
-                            changed={nameChangedHandler}
-                            click={() => deletePersonHandler(index)}>
+                            key={person.id}
+                            changed={event => nameChangedHandler(event, person.id)}
+                            click={() => deletePersonHandler(person.id)}>
                             My hobby: Nothing
                         </Person>
                     );
