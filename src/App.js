@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import './App.css';
+import classes from './App.module.css';
 import Person from './Person/Person';
 
 const app = (props) => {
@@ -13,20 +13,6 @@ const app = (props) => {
     });
 
     const [otherState, setOtherState] = useState('someValue');
-
-    const style = {
-        backgroundColor: 'green',
-        color: 'white',
-        font: 'inherit',
-        fontWeight: '600',
-        border: '1px solid blue',
-        padding: '8px',
-        cursor: 'pointer',
-        ':hover': {
-            backgroundColor: 'lightgreen',
-            color: 'black'
-        }
-    }
 
     const nameChangedHandler = (event) => {
         setPersonsState({
@@ -57,6 +43,7 @@ const app = (props) => {
     }
 
     let persons = null;
+    let btnClass = '';
 
     if (personsState.showPersons) {
         persons = (
@@ -76,22 +63,24 @@ const app = (props) => {
             </div>
         );
 
-        style.backgroundColor = 'red';
-        style[':hover'] = {
-            backgroundColor: 'salmon',
-            color: 'black'
-        }
+        btnClass = classes.Red;
     }
 
-    let classes = ['red', 'bold'].join(' ');
+    const assignedClasses = [];
+    if (personsState.persons.length <= 2) {
+        assignedClasses.push(classes.red); // classes = ['red']
+    }
+    if (personsState.persons.length <= 1) {
+        assignedClasses.push(classes.bold); // classes = ['red', 'bold']
+    }
 
     return (
-        <div className="App">
+        <div className={classes.App}>
             <h1>This is React Application.</h1>
-            <p className={personsState.showPersons ? classes : ''}>And It's working</p>
+            <p className={assignedClasses.join(' ')}>And It's working</p>
 
             <button
-                style={style}
+                className={btnClass}
                 onClick={showPersonsHandler}>
                 Show persons
             </button>
