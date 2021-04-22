@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import './App.css';
 import Person from './Person/Person';
+import styled from 'styled-components';
 
 const app = (props) => {
     const [personsState, setPersonsState] = useState({
@@ -14,19 +15,20 @@ const app = (props) => {
 
     const [otherState, setOtherState] = useState('someValue');
 
-    const style = {
-        backgroundColor: 'green',
-        color: 'white',
-        font: 'inherit',
-        fontWeight: '600',
-        border: '1px solid blue',
-        padding: '8px',
-        cursor: 'pointer',
-        ':hover': {
-            backgroundColor: 'lightgreen',
-            color: 'black'
-        }
-    }
+    const StyledButton = styled.button`
+      background-color: ${props => props.alt ? 'red' : 'green'};
+      color: white;
+      font: inherit;
+      font-weight: 600;
+      border: 1px solid blue;
+      padding: 8px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: ${props => props.alt ? 'salmon' : 'lightgreen'};
+        color: ${props => props.alt ? 'white' : 'black'};
+      }
+    `;
 
     const nameChangedHandler = (event) => {
         setPersonsState({
@@ -75,12 +77,6 @@ const app = (props) => {
                 })}
             </div>
         );
-
-        style.backgroundColor = 'red';
-        style[':hover'] = {
-            backgroundColor: 'salmon',
-            color: 'black'
-        }
     }
 
     let classes = ['red', 'bold'].join(' ');
@@ -90,11 +86,11 @@ const app = (props) => {
             <h1>This is React Application.</h1>
             <p className={personsState.showPersons ? classes : ''}>And It's working</p>
 
-            <button
-                style={style}
+            <StyledButton
+                alt={personsState.showPersons}
                 onClick={showPersonsHandler}>
                 Show persons
-            </button>
+            </StyledButton>
             {persons}
         </div>
     );
