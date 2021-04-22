@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import './App.css';
 import Person from './Person/Person';
-import Radium, {StyleRoot} from 'radium';
 
 const app = (props) => {
     const [personsState, setPersonsState] = useState({
@@ -87,20 +86,18 @@ const app = (props) => {
     let classes = ['red', 'bold'].join(' ');
 
     return (
-        <StyleRoot>
-            <div className="App">
-                <h1>This is React Application.</h1>
-                <p className={personsState.showPersons ? classes : ''}>And It's working</p>
+        <div className="App">
+            <h1>This is React Application.</h1>
+            <p className={personsState.showPersons ? classes : ''}>And It's working</p>
 
-                <button
-                    style={style}
-                    onClick={showPersonsHandler}>
-                    Show persons
-                </button>
-                {persons}
-            </div>
-        </StyleRoot>
+            <button
+                style={style}
+                onClick={showPersonsHandler}>
+                Show persons
+            </button>
+            {persons}
+        </div>
     );
 }
 
-export default Radium(app);
+export default app;
