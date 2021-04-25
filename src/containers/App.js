@@ -23,8 +23,18 @@ class App extends Component {
             {id: 1, name: 'Vasyl', age: 25},
             {id: 2, name: 'Peta', age: 30}
         ],
-        showPersons: false
+        showPersons: false,
+        showCockpit: true
     };
+
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        console.log('[App.js] shouldComponentUpdate');
+        return true;
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log('[App.js] componentDidUpdate');
+    }
 
     nameChangedHandler = (event, id) => {
         const personIndex = this.state.persons.findIndex((person) => {
@@ -67,6 +77,13 @@ class App extends Component {
         });
     }
 
+    showCockpitHandler = () => {
+        const showCockpit = this.state.showCockpit;
+        this.setState({
+            showCockpit: !showCockpit
+        });
+    }
+
     render() {
         console.log('[App.js] render');
         let persons = null;
@@ -83,12 +100,15 @@ class App extends Component {
 
         return (
             <div className={classes.App}>
-                <Cockpit
-                    title={this.props.appTitle}
-                    showPersons={this.state.showPersons}
-                    persons={this.state.persons}
-                    clicked={this.showPersonsHandler}
-                />
+                <button onClick={this.showCockpitHandler}>Toggle Cockpit show</button>
+                {this.state.showCockpit ?
+                    <Cockpit
+                        title={this.props.appTitle}
+                        showPersons={this.state.showPersons}
+                        persons={this.state.persons}
+                        clicked={this.showPersonsHandler}
+                    />
+                    : null}
 
                 {persons}
             </div>
